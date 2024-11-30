@@ -10,6 +10,7 @@ const visitSchema = new mongoose.Schema({
       device: String,
       browser: String,
       platform: String,
+      page: String,
       timestamp: { type: Date, default: Date.now },
       referrer: String,
     },

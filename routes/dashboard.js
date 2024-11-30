@@ -161,4 +161,33 @@ router.get("/projectsByUsers", verifyToken, async (req, res) => {
 //   }
 // });
 
+router.delete(
+  "/projects/:id/visits/:visitId/delete",
+  verifyToken,
+  async (req, res) => {
+    try {
+      const project = await Visit.findById(req.params.id);
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      const visitIndex = project.visit.findIndex(
+        (visit) => visit._id.toString() === req.params.visitId
+      );
+
+      if (visitIndex === -1) {
+        return res.status(404).json({ message: "Visit not found" });
+      }
+
+      project.visit.splice(visitIndex, 1);
+      await project.save();
+
+      res.status(200).json({ message: "Visit deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting visit:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+);
+
 export default router;
