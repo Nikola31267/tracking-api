@@ -6,6 +6,8 @@ import cors from "cors";
 import authRoutes from "./routes/auth.js";
 import createProjectRoutes from "./routes/create-project.js";
 import dashboardRoutes from "./routes/dashboard.js";
+import settingsRoutes from "./routes/settings.js";
+
 dotenv.config();
 
 const app = express();
@@ -23,6 +25,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/create", createProjectRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/settings", settingsRoutes);
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(8000, () => {

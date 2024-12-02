@@ -4,6 +4,7 @@ const visitSchema = new mongoose.Schema({
   key: { type: String, required: true, unique: true },
   projectName: { type: String, required: true },
   logo: { type: String, default: null },
+  goal: { type: String, default: "" },
   visit: [
     {
       ip: String,
