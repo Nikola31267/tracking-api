@@ -11,6 +11,12 @@ const userSchema = new mongoose.Schema({
   magicLinkToken: { type: String, default: "" },
   magicLinkExpiresAt: { type: Date, default: null },
   isEmailVerified: { type: Boolean, default: false },
+  socialConnected: [
+    {
+      name: { type: String },
+      image: { type: String },
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);

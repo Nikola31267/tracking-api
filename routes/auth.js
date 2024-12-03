@@ -101,11 +101,30 @@ router.post("/google-signin", async (req, res) => {
         fullName,
         username: email,
         profilePicture,
+        socialConnected: [
+          {
+            name: "Google",
+            image:
+              "https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png",
+          },
+        ],
       });
       await newUser.save();
       user = newUser;
     } else {
       user = userExists;
+      const googleConnected = user.socialConnected.find(
+        (social) => social.name === "Google"
+      );
+
+      if (!googleConnected) {
+        user.socialConnected.push({
+          name: "Google",
+          image:
+            "https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png",
+        });
+        await user.save();
+      }
     }
 
     const jwtToken = jwt.sign(
@@ -325,6 +344,107 @@ router.post("/verify-magic-link", async (req, res) => {
       message: "Error verifying magic link",
       error: error.message,
     });
+  }
+});
+
+router.put("/disconnect-social", verifyToken, async (req, res) => {
+  try {
+    const { social } = req.body;
+
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.socialConnected = user.socialConnected.filter(
+      (connected) => connected.name !== social
+    );
+    await user.save();
+    res.status(200).json({ message: "Social disconnected successfully" });
+  } catch (error) {
+    console.error("Error disconnecting social account:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+router.post("/reset-password", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const resetPasswordToken = crypto.randomBytes(32).toString("hex");
+    const resetPasswordExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+    user.resetPasswordToken = resetPasswordToken;
+    user.resetPasswordExpiresAt = resetPasswordExpiresAt;
+    await user.save();
+
+    await (async function () {
+      const { data, error } = await resend.emails.send({
+        from: "PixelTrack <pixeltrack@builderbee.pro>",
+        to: [email],
+        subject: "Reset your password",
+        html: `
+          <div>
+            <p>Click the link below to reset your password.</p>
+            <a href="http://localhost:3000/reset-password?token=${resetPasswordToken}">Reset password</a>
+          </div>
+        `,
+      });
+
+      if (error) {
+        return console.error({ error });
+      }
+
+      console.log({ data });
+    })();
+  } catch (error) {
+    console.error("Error resetting password:", error);
+  }
+});
+
+router.post("/verify-reset-password", async (req, res) => {
+  const { token, password } = req.body;
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpiresAt: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    user.resetPasswordToken = "";
+    user.resetPasswordExpiresAt = null;
+    user.password = await bcrypt.hash(password, 10);
+    await user.save();
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    console.error("Error verifying reset password:", error);
+  }
+});
+
+router.delete("/delete-account", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await user.deleteOne();
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
