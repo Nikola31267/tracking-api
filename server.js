@@ -37,7 +37,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/create", createProjectRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/settings", settingsRoutes);
-app.use("/track", trackRoutes);
+// app.use("/track", trackRoutes);
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(8000, () => {
