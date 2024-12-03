@@ -12,10 +12,20 @@ dotenv.config();
 
 const app = express();
 
+// app.use(
+//   cors({
+//     origin: ["http://localhost:3000", "https://pixel-track.vercel.app"],
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://pixel-track.vercel.app"],
-    credentials: true,
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   })
 );
 
