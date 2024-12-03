@@ -7,7 +7,7 @@ import authRoutes from "./routes/auth.js";
 import createProjectRoutes from "./routes/create-project.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import settingsRoutes from "./routes/settings.js";
-import trackRoutes from "./routes/track.js";
+
 dotenv.config();
 
 const app = express();
