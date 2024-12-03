@@ -7,7 +7,13 @@ import { verifyToken } from "../middleware/auth.js";
 import axios from "axios";
 import multer from "multer";
 import cloudinary from "../config/cloudinary.js";
+import { Resend } from "resend";
+import crypto from "crypto";
+import dotenv from "dotenv";
 
+dotenv.config();
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 const storage = multer.memoryStorage();
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
@@ -220,6 +226,105 @@ router.put("/deleteProfilePicture", verifyToken, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+router.post("/magic-link", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const magicLinkToken = crypto.randomBytes(32).toString("hex");
+    const magicLinkExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({
+        email,
+        username: email.split("@")[0],
+        magicLinkToken,
+        magicLinkExpiresAt,
+      });
+    } else {
+      user.magicLinkToken = magicLinkToken;
+      user.magicLinkExpiresAt = magicLinkExpiresAt;
+    }
+
+    await user.save();
+
+    await (async function () {
+      const { data, error } = await resend.emails.send({
+        from: "PixelTrack <pixeltrack@builderbee.pro>",
+        to: [email],
+        subject: "Verify your email",
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
+            <h1 style="color: #1a73e8; text-align: center;">Hello!</h1>
+            <p style="font-size: 16px; color: #333;">Click the link below to verify your email.</p>
+            <a href="http://localhost:3000/verify-magic-link?token=${magicLinkToken}">Verify email</a>
+            
+            <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
+              &copy; ${new Date().getFullYear()} PixelTrack. All rights reserved.
+            </p>
+          </div>
+        `,
+      });
+
+      if (error) {
+        return console.error({ error });
+      }
+
+      console.log({ data });
+    })();
+
+    res.status(200).json({
+      message: "Magic link sent successfully. Please check your email.",
+    });
+  } catch (error) {
+    console.error("Magic link error:", error);
+    res.status(500).json({
+      message: "Error sending magic link",
+      error: error.message,
+    });
+  }
+});
+
+router.post("/verify-magic-link", async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const user = await User.findOne({
+      magicLinkToken: token,
+      magicLinkExpiresAt: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid or expired magic link",
+      });
+    }
+
+    user.magicLinkToken = "";
+    user.magicLinkExpiresAt = null;
+    user.isEmailVerified = true;
+    await user.save();
+
+    const jwtToken = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.status(200).json({
+      message: "Email verified successfully",
+      token: jwtToken,
+    });
+  } catch (error) {
+    console.error("Verification error:", error);
+    res.status(500).json({
+      message: "Error verifying magic link",
+      error: error.message,
+    });
   }
 });
 

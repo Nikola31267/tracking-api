@@ -8,6 +8,9 @@ const userSchema = new mongoose.Schema({
   profilePicture: { type: String, default: "" },
   resetPasswordToken: { type: String, default: "" },
   resetPasswordExpiresAt: { type: Date, default: null },
+  magicLinkToken: { type: String, default: "" },
+  magicLinkExpiresAt: { type: Date, default: null },
+  isEmailVerified: { type: Boolean, default: false },
 });
 
 const User = mongoose.model("User", userSchema);
