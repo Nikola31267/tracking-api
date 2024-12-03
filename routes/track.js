@@ -1,6 +1,6 @@
 import express from "express";
 import Visit from "../models/Visit.js";
-import userAgent from "user-agent-parser";
+import UAParser from "ua-parser-js";
 import { Resend } from "resend";
 import dotenv from "dotenv";
 import geoip from "geoip-lite";
@@ -15,7 +15,8 @@ router.post("/", async (req, res) => {
   try {
     const { headers, body } = req;
     const { apiKey, page } = body;
-    const agent = userAgent(headers["user-agent"]);
+    const parser = new UAParser();
+    const agent = parser.setUA(headers["user-agent"]).getResult();
 
     const geo = geoip.lookup(req.ip);
     const country = geo ? geo.country : "Unknown";

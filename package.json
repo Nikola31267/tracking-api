@@ -25,7 +25,7 @@
     "mongoose": "^8.8.3",
     "multer": "^1.4.5-lts.1",
     "resend": "^4.0.1",
-    "user-agent-parser": "^0.6.0"
+    "ua-parser-js": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
