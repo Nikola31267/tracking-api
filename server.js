@@ -7,7 +7,7 @@ import authRoutes from "./routes/auth.js";
 import createProjectRoutes from "./routes/create-project.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import settingsRoutes from "./routes/settings.js";
-
+import trackRoutes from "./routes/track.js";
 dotenv.config();
 
 const app = express();
@@ -36,6 +36,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/create", createProjectRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/track", trackRoutes);
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(8000, () => {
