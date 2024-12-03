@@ -10,8 +10,20 @@ router.use(bodyParser.json({ limit: "50mb" }));
 
 router.get("/projects", verifyToken, async (req, res) => {
   try {
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const projects = await Visit.find({ creator: req.user.id });
-    res.status(200).json(projects);
+
+    const totalRecentVisits = projects.reduce((total, project) => {
+      const recentVisits = project.visit.filter(
+        (visit) => visit.timestamp >= oneDayAgo
+      );
+      return total + recentVisits.length;
+    }, 0);
+
+    res.status(200).json({
+      allProjects: projects,
+      totalRecentVisits,
+    });
   } catch (error) {
     console.error("Error fetching projects:", error);
     res.status(500).json({ message: "Server error" });
@@ -189,31 +201,5 @@ router.delete(
     }
   }
 );
-
-router.get("/projects/views/last-24-hours", verifyToken, async (req, res) => {
-  try {
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const projects = await Visit.find({
-      creator: req.user.id,
-      "visit.timestamp": { $gte: oneDayAgo },
-    });
-
-    const views = projects.map((project) => {
-      const recentVisits = project.visit.filter(
-        (visit) => visit.timestamp >= oneDayAgo
-      );
-      return {
-        projectId: project._id,
-        projectName: project.projectName,
-        views: recentVisits.length,
-      };
-    });
-
-    res.status(200).json(views);
-  } catch (error) {
-    console.error("Error fetching views for the last 24 hours:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
 export default router;
