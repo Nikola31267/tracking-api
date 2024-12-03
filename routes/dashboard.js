@@ -107,59 +107,59 @@ router.get("/projectsByUsers", verifyToken, async (req, res) => {
   }
 });
 
-// router.put("/projects/:id/updateProject", verifyToken, async (req, res) => {
-//   try {
-//     const project = await Api.findById(req.params.id);
-//     if (req.body.projectName) {
-//       project.projectName = req.body.projectName;
-//     }
-//     if (req.body.supportEmail) {
-//       project.supportEmail = req.body.supportEmail;
-//     }
+router.put("/projects/:id/updateProject", verifyToken, async (req, res) => {
+  try {
+    const project = await Api.findById(req.params.id);
+    if (req.body.projectName) {
+      project.projectName = req.body.projectName;
+    }
+    if (req.body.supportEmail) {
+      project.supportEmail = req.body.supportEmail;
+    }
 
-//     if (req.body.logo) {
-//       if (project.logo) {
-//         const publicId = project.logo
-//           .split("/")
-//           .slice(-2)
-//           .join("/")
-//           .split(".")[0];
-//         await cloudinary.uploader.destroy(publicId);
-//       }
+    if (req.body.logo) {
+      if (project.logo) {
+        const publicId = project.logo
+          .split("/")
+          .slice(-2)
+          .join("/")
+          .split(".")[0];
+        await cloudinary.uploader.destroy(publicId);
+      }
 
-//       const uploadResponse = await cloudinary.uploader.upload(req.body.logo, {
-//         folder: "project_logos",
-//       });
-//       project.logo = uploadResponse.secure_url;
-//     }
+      const uploadResponse = await cloudinary.uploader.upload(req.body.logo, {
+        folder: "project_logos",
+      });
+      project.logo = uploadResponse.secure_url;
+    }
 
-//     await project.save();
-//     res.status(200).json({ message: "Project updated successfully" });
-//   } catch (error) {
-//     console.error("Error updating project:", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
+    await project.save();
+    res.status(200).json({ message: "Project updated successfully" });
+  } catch (error) {
+    console.error("Error updating project:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
-// router.put("/projects/:id/removeLogo", verifyToken, async (req, res) => {
-//   try {
-//     const project = await Api.findById(req.params.id);
-//     if (project.logo) {
-//       const publicId = project.logo
-//         .split("/")
-//         .slice(-2)
-//         .join("/")
-//         .split(".")[0];
-//       await cloudinary.uploader.destroy(publicId);
-//     }
-//     project.logo = null;
-//     await project.save();
-//     res.status(200).json({ message: "Logo removed successfully" });
-//   } catch (error) {
-//     console.error("Error removing logo:", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
+router.put("/projects/:id/removeLogo", verifyToken, async (req, res) => {
+  try {
+    const project = await Api.findById(req.params.id);
+    if (project.logo) {
+      const publicId = project.logo
+        .split("/")
+        .slice(-2)
+        .join("/")
+        .split(".")[0];
+      await cloudinary.uploader.destroy(publicId);
+    }
+    project.logo = null;
+    await project.save();
+    res.status(200).json({ message: "Logo removed successfully" });
+  } catch (error) {
+    console.error("Error removing logo:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 router.delete(
   "/projects/:id/visits/:visitId/delete",
@@ -189,5 +189,31 @@ router.delete(
     }
   }
 );
+
+router.get("/projects/views/last-24-hours", verifyToken, async (req, res) => {
+  try {
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const projects = await Visit.find({
+      creator: req.user.id,
+      "visit.timestamp": { $gte: oneDayAgo },
+    });
+
+    const views = projects.map((project) => {
+      const recentVisits = project.visit.filter(
+        (visit) => visit.timestamp >= oneDayAgo
+      );
+      return {
+        projectId: project._id,
+        projectName: project.projectName,
+        views: recentVisits.length,
+      };
+    });
+
+    res.status(200).json(views);
+  } catch (error) {
+    console.error("Error fetching views for the last 24 hours:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 export default router;
