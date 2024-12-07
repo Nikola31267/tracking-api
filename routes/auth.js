@@ -382,7 +382,7 @@ router.post("/magic-link", async (req, res) => {
     })();
 
     res.status(200).json({
-      message: "Magic link sent successfully. Please check your email.",
+      message: "Link sent successfully. Please check your email.",
     });
   } catch (error) {
     console.error("Magic link error:", error);
@@ -476,11 +476,80 @@ router.post("/reset-password", async (req, res) => {
         to: [email],
         subject: "Reset your password",
         html: `
-          <div>
-            <p>Click the link below to reset your password.</p>
-            <a href="http://localhost:3000/reset-password?token=${resetPasswordToken}">Reset password</a>
+        <div style="
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          min-height: 100vh; 
+          background-color: white;
+          padding: 16px; 
+          font-family: sans-serif;
+          text-align: center;
+        ">
+          <div style="
+            width: 100%; 
+            max-width: 400px; 
+            background-color: #f9fafb;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px; 
+            padding: 16px;
+            margin: auto;
+          ">
+            <div style="margin-bottom: 16px;">
+              <div style="margin-bottom: 16px;">
+                <img 
+                  src="https://res.cloudinary.com/dcxo5usnu/image/upload/v1733307852/logo-nobg_wizmwu.png" 
+                  style="width: 64px; height: 64px; display: block; margin: 0 auto;" 
+                  oncontextmenu="return false;" 
+                  draggable="false"
+                />
+              </div>
+              <h1 style="font-size: 24px; font-weight: bold; color: #1f2937;">
+                Reset Your Password
+              </h1>
+            </div>
+            <div style="margin-bottom: 26px;">
+              <div style="
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                gap: 8px; 
+                color: #4F46E5; 
+                margin-bottom: 16px;
+              ">
+                <span style="font-size: 18px; font-weight: 600;">
+                  Reset Your Password
+                </span>
+              </div>
+              <p style="color: #374151;">
+                We've sent you a link to reset your password. Simply click the button below to get started.
+              </p>
+            </div>
+            <div style="display: flex; justify-content: center;">
+              <a style="
+                width: 100%; 
+                padding: 12px; 
+                background-color: #4F46E5; 
+                color: white; 
+                font-size: 16px; 
+                font-weight: 600; 
+                border: none; 
+                border-radius: 4px; 
+                cursor: pointer; 
+                text-decoration: none;
+                text-align: center;
+                display: block;
+              " href="http://localhost:3000/verify-reset-password?token=${resetPasswordToken}">
+                Reset Password
+              </a>
+            </div>
+            <div style="text-align: center; font-size: 14px; color: #9CA3AF; margin-top: 34px;">
+              <p>This link will expire in 15 minutes for security reasons.</p>
+              <p style="margin-top: 8px;">If you didn't request this, please ignore this email.</p>
+            </div>
           </div>
-        `,
+        </div>
+      `,
       });
 
       if (error) {
