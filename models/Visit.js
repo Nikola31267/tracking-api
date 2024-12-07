@@ -16,6 +16,7 @@ const visitSchema = new mongoose.Schema({
       referrer: String,
     },
   ],
+  addedSnippet: { type: Boolean, default: false },
   creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
