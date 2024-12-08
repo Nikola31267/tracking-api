@@ -277,99 +277,18 @@ router.post("/magic-link", async (req, res) => {
         to: [email],
         subject: "Verify your email",
         html: `
-          <div style="
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            min-height: 100vh; 
-            background-color: white;
-            padding: 16px; 
-            font-family: sans-serif;
-            text-align: center;
-          ">
-            <div style="
-              width: 100%; 
-              max-width: 400px; 
-              background-color: #f9fafb;
-              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-              border-radius: 8px; 
-              padding: 16px;
-              margin: auto;
-            ">
-              <div style="margin-bottom: 16px;">
-                <div style="margin-bottom: 16px;">
-                  <img 
-                    src="https://res.cloudinary.com/dcxo5usnu/image/upload/v1733307852/logo-nobg_wizmwu.png" 
-                    style="width: 64px; height: 64px; display: block; margin: 0 auto;" 
-                    oncontextmenu="return false;" 
-                    draggable="false"
-                  />
-                </div>
-                <h1 style="font-size: 24px; font-weight: bold; color: #1f2937;">
-                  Verify Your Email
-                </h1>
-              </div>
-              <div style="margin-bottom: 26px;">
-                <div style="
-                  display: flex; 
-                  align-items: center; 
-                  justify-content: center; 
-                  gap: 8px; 
-                  color: #4F46E5; 
-                  margin-bottom: 16px;
-                ">
-                  <span style="font-size: 18px; font-weight: 600;">
-                    Email Verification
-                  </span>
-                </div>
-                <p style="color: #374151;">
-                  We've sent you a link to complete your sign up process. Simply click the button below to get started.
-                </p>
-                <div style="
-                  background-color: #f9fafb; 
-                  padding: 16px; 
-                  border-radius: 8px; 
-                  margin-top: 16px;
-                  text-align: left;
-                ">
-                  <h2 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">
-                    How It Works
-                  </h2>
-                  <ul style="
-                    list-style-type: disc; 
-                    padding-left: 20px; 
-                    color: #374151; 
-                    line-height: 1.5;
-                  ">
-                    <li>Click the button below</li>
-                    <li>You'll be instantly signed in</li>
-                    <li>Set up your profile and start using PixelTrack.</li>
-                  </ul>
-                </div>
-              </div>
-              <div style="display: flex; justify-content: center;">
-                <a style="
-                  width: 100%; 
-                  padding: 12px; 
-                  background-color: #4F46E5; 
-                  color: white; 
-                  font-size: 16px; 
-                  font-weight: 600; 
-                  border: none; 
-                  border-radius: 4px; 
-                  cursor: pointer; 
-                  text-decoration: none;
-                  text-align: center;
-                  display: block;
-                " href="http://localhost:3000/verify-magic-link?token=${magicLinkToken}">
-                  Verify Email
-                </a>
-              </div>
-              <div style="text-align: center; font-size: 14px; color: #9CA3AF; margin-top: 34px;">
-                <p>This link will expire in 15 minutes for security reasons.</p>
-                <p style="margin-top: 8px;">If you didn't request this, please ignore this email.</p>
-              </div>
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
+            <h1 style="color: #8b5cf6; text-align: center;">Verify Your Email Address</h1>
+            <p style="font-size: 16px; color: #333;">Hello ${email},</p>
+            <p style="font-size: 16px; color: #333;">Thank you for signing up for PixelTrack. Please click the link below to verify your email address:</p>
+            
+            <div style="text-align: center; margin-top: 20px;">
+              <a href="http://localhost:3000/verify-magic-link?token=${magicLinkToken}" style="text-decoration: none; padding: 10px 20px; background-color: #8b5cf6; color: #fff; border-radius: 4px;" target="_blank">Verify Email</a>
             </div>
+    
+            <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
+              &copy; ${new Date().getFullYear()} PixelTrack. All rights reserved.
+            </p>
           </div>
         `,
       });
@@ -476,79 +395,19 @@ router.post("/reset-password", async (req, res) => {
         to: [email],
         subject: "Reset your password",
         html: `
-        <div style="
-          display: flex; 
-          align-items: center; 
-          justify-content: center; 
-          min-height: 100vh; 
-          background-color: white;
-          padding: 16px; 
-          font-family: sans-serif;
-          text-align: center;
-        ">
-          <div style="
-            width: 100%; 
-            max-width: 400px; 
-            background-color: #f9fafb;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px; 
-            padding: 16px;
-            margin: auto;
-          ">
-            <div style="margin-bottom: 16px;">
-              <div style="margin-bottom: 16px;">
-                <img 
-                  src="https://res.cloudinary.com/dcxo5usnu/image/upload/v1733307852/logo-nobg_wizmwu.png" 
-                  style="width: 64px; height: 64px; display: block; margin: 0 auto;" 
-                  oncontextmenu="return false;" 
-                  draggable="false"
-                />
-              </div>
-              <h1 style="font-size: 24px; font-weight: bold; color: #1f2937;">
-                Reset Your Password
-              </h1>
+       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
+            <h1 style="color: #8b5cf6; text-align: center;">Reset Your Password</h1>
+            <p style="font-size: 16px; color: #333;">Hello ${email},</p>
+            <p style="font-size: 16px; color: #333;">We received a request to reset your password. If you did not request this, please ignore this email. Otherwise, you can reset your password by clicking the link below:</p>
+            
+            <div style="text-align: center; margin-top: 20px;">
+              <a href="http://localhost:3000/reset-password?token=${resetPasswordToken}" style="text-decoration: none; padding: 10px 20px; background-color: #8b5cf6; color: #fff; border-radius: 4px;" target="_blank">Reset Password</a>
             </div>
-            <div style="margin-bottom: 26px;">
-              <div style="
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                gap: 8px; 
-                color: #4F46E5; 
-                margin-bottom: 16px;
-              ">
-                <span style="font-size: 18px; font-weight: 600;">
-                  Reset Your Password
-                </span>
-              </div>
-              <p style="color: #374151;">
-                We've sent you a link to reset your password. Simply click the button below to get started.
-              </p>
-            </div>
-            <div style="display: flex; justify-content: center;">
-              <a style="
-                width: 100%; 
-                padding: 12px; 
-                background-color: #4F46E5; 
-                color: white; 
-                font-size: 16px; 
-                font-weight: 600; 
-                border: none; 
-                border-radius: 4px; 
-                cursor: pointer; 
-                text-decoration: none;
-                text-align: center;
-                display: block;
-              " href="http://localhost:3000/verify-reset-password?token=${resetPasswordToken}">
-                Reset Password
-              </a>
-            </div>
-            <div style="text-align: center; font-size: 14px; color: #9CA3AF; margin-top: 34px;">
-              <p>This link will expire in 15 minutes for security reasons.</p>
-              <p style="margin-top: 8px;">If you didn't request this, please ignore this email.</p>
-            </div>
+    
+            <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
+              &copy; ${new Date().getFullYear()} PixelTrack. All rights reserved.
+            </p>
           </div>
-        </div>
       `,
       });
 
