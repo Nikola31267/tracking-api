@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
   ],
   hasAccess: { type: Boolean, default: false },
   priceId: { type: String, default: "" },
+  customerId: { type: String, default: "" },
 });
 
 const User = mongoose.model("User", userSchema);
