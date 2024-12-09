@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   username: { type: String },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   fullName: { type: String },
   password: { type: String },
   profilePicture: { type: String, default: "" },
@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema({
       image: { type: String },
     },
   ],
+  hasAccess: { type: Boolean, default: false },
+  priceId: { type: String, default: "" },
 });
 
 const User = mongoose.model("User", userSchema);
