@@ -10,6 +10,7 @@ import cloudinary from "../config/cloudinary.js";
 import { Resend } from "resend";
 import crypto from "crypto";
 import dotenv from "dotenv";
+import Visit from "../models/Visit.js";
 
 dotenv.config();
 
@@ -453,8 +454,11 @@ router.delete("/delete-account", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    await Visit.deleteMany({ creator: user._id });
     await user.deleteOne();
-    res.status(200).json({ message: "Account deleted successfully" });
+    res
+      .status(200)
+      .json({ message: "Account and associated visits deleted successfully" });
   } catch (error) {
     console.error("Error deleting account:", error);
     res.status(500).json({ message: "Server error" });
