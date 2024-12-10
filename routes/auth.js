@@ -288,7 +288,7 @@ router.post("/magic-link", async (req, res) => {
             </div>
     
             <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
-              &copy; ${new Date().getFullYear()} PixelTrack. All rights reserved.
+              &copy; ${new Date().getFullYear()} Pixel Track. All rights reserved.
             </p>
           </div>
         `,
@@ -406,7 +406,7 @@ router.post("/reset-password", async (req, res) => {
             </div>
     
             <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
-              &copy; ${new Date().getFullYear()} PixelTrack. All rights reserved.
+              &copy; ${new Date().getFullYear()} Pixel Track. All rights reserved.
             </p>
           </div>
       `,
