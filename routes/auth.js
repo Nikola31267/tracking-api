@@ -274,7 +274,7 @@ router.post("/magic-link", async (req, res) => {
 
     await (async function () {
       const { data, error } = await resend.emails.send({
-        from: "PixelTrack <pixeltrack@builderbee.pro>",
+        from: "Pixel Track <pixeltrack@builderbee.pro>",
         to: [email],
         subject: "Verify your email",
         html: `
@@ -392,7 +392,7 @@ router.post("/reset-password", async (req, res) => {
 
     await (async function () {
       const { data, error } = await resend.emails.send({
-        from: "PixelTrack <pixeltrack@builderbee.pro>",
+        from: "Pixel Track <pixeltrack@builderbee.pro>",
         to: [email],
         subject: "Reset your password",
         html: `
