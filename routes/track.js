@@ -12,8 +12,8 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
-    const { headers } = req;
-    const { apiKey, page, referrer } = req.body;
+    const { headers, body } = req;
+    const { apiKey, page, referrer } = body;
     const agent = userAgent(headers["user-agent"]);
 
     const ip =

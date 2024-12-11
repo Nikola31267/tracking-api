@@ -11,6 +11,7 @@ import trackRoutes from "./routes/track.js";
 dotenv.config();
 
 const app = express();
+app.use(bodyParser.json());
 
 const restrictedCorsOptions = {
   origin: ["http://localhost:3000", "https://pixel-track.vercel.app"],
