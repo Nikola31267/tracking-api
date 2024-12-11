@@ -12,7 +12,10 @@ import trackRoutes from "./routes/track.js";
 dotenv.config();
 
 const app = express();
+
 app.use(bodyParser.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 const restrictedCorsOptions = {
   origin: ["http://localhost:3000", "https://pixel-track.vercel.app"],
@@ -32,9 +35,6 @@ app.use("/api/dashboard", cors(restrictedCorsOptions), dashboardRoutes);
 app.use("/api/settings", cors(restrictedCorsOptions), settingsRoutes);
 app.use("/api/auth", cors(restrictedCorsOptions), authRoutes);
 app.use("/track", cors(openCorsOptions), trackRoutes);
-
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(8000, () => {

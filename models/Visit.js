@@ -14,6 +14,7 @@ const visitSchema = new mongoose.Schema({
       page: String,
       timestamp: { type: Date, default: Date.now },
       referrer: String,
+      country: String,
     },
   ],
   addedSnippet: { type: Boolean, default: false },
