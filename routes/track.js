@@ -38,7 +38,6 @@ router.post("/", async (req, res) => {
       referrer: referrer || "Unknown",
       country: country,
     };
-
     const visitDocument = await Visit.findOne({ key: apiKey }).populate(
       "creator",
       "email"
@@ -84,5 +83,4 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Error logging visit" });
   }
 });
-
 export default router;
