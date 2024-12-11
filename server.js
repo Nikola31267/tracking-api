@@ -2,6 +2,7 @@ import express from "express";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import cors from "cors";
+import bodyParser from "body-parser";
 
 import authRoutes from "./routes/auth.js";
 import createProjectRoutes from "./routes/create-project.js";
