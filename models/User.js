@@ -17,9 +17,11 @@ const userSchema = new mongoose.Schema({
       image: { type: String },
     },
   ],
-  hasAccess: { type: Boolean, default: false },
+  hasAccess: { type: Boolean },
   priceId: { type: String, default: "" },
   customerId: { type: String, default: "" },
+  freeTrialEndsAt: { type: Date, default: null },
+  newUser: { type: Boolean, default: true },
 });
 
 const User = mongoose.model("User", userSchema);

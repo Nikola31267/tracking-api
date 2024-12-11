@@ -33,6 +33,9 @@ router.post("/register", async (req, res) => {
       email,
       fullName,
       password: hashedPassword,
+      freeTrialEndsAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      newUser: true,
+      hasAccess: true,
     });
     await newUser.save();
     jwt.sign(
@@ -102,6 +105,9 @@ router.post("/google-signin", async (req, res) => {
         fullName,
         username: email,
         profilePicture,
+        hasAccess: true,
+        freeTrialEndsAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        newUser: true,
         socialConnected: [
           {
             name: "Google",
@@ -151,6 +157,13 @@ router.post("/google-signin", async (req, res) => {
 
 router.get("/user", verifyToken, async (req, res) => {
   const user = await User.findById(req.user.id);
+
+  if (user.freeTrialEndsAt && user.freeTrialEndsAt < Date.now()) {
+    user.hasAccess = false;
+    user.freeTrialEndsAt = null;
+    await user.save();
+  }
+
   res.status(200).json(user);
 });
 
@@ -262,6 +275,9 @@ router.post("/magic-link", async (req, res) => {
       user = new User({
         email,
         username: email.split("@")[0],
+        hasAccess: true,
+        freeTrialEndsAt: new Date(Date.now() + 3 * 60 * 1000),
+        newUser: true,
         magicLinkToken,
         magicLinkExpiresAt,
       });
@@ -463,6 +479,14 @@ router.delete("/delete-account", verifyToken, async (req, res) => {
     console.error("Error deleting account:", error);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+router.put("/removeNewUser", async (req, res) => {
+  const { userId } = req.body;
+  const user = await User.findById(userId);
+  user.newUser = false;
+  await user.save();
+  res.status(200).json({ message: "New user status removed successfully" });
 });
 
 export default router;
