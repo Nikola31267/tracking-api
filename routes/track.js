@@ -12,8 +12,8 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
-    const { headers, body } = req;
-    const { apiKey, page, referrer } = body;
+    const { headers } = req;
+    const { apiKey, page, referrer } = req.body;
     const agent = userAgent(headers["user-agent"]);
 
     const ip =
@@ -83,4 +83,5 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Error logging visit" });
   }
 });
+
 export default router;
