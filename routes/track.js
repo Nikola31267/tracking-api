@@ -38,6 +38,7 @@ router.post("/", async (req, res) => {
       referrer: referrer || "Unknown",
       country: country,
     };
+
     const visitDocument = await Visit.findOne({ key: apiKey }).populate(
       "creator",
       "email"

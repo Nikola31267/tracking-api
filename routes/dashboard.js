@@ -69,16 +69,6 @@ router.delete("/projects/:id", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/projects/:id", verifyToken, async (req, res) => {
-  try {
-    const visits = await Visit.findById(req.params.id);
-    res.status(200).json(visits);
-  } catch (error) {
-    console.error("Error fetching visits:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
 router.get("/projects/:id/visits", verifyToken, async (req, res) => {
   try {
     const project = await Visit.findById(req.params.id);
