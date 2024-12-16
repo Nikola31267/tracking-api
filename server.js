@@ -30,6 +30,10 @@ const openCorsOptions = {
   optionsSuccessStatus: 204,
 };
 
+app.get("/", (req, res) => {
+  res.redirect("http://localhost:3000");
+});
+
 app.use("/api/create", cors(restrictedCorsOptions), createProjectRoutes);
 app.use("/api/dashboard", cors(restrictedCorsOptions), dashboardRoutes);
 app.use("/api/settings", cors(restrictedCorsOptions), settingsRoutes);
