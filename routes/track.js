@@ -13,8 +13,9 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   try {
     const { headers, body } = req;
-    const { apiKey, page, referrer } = body;
+    const { projectName, page, referrer } = body;
     const agent = userAgent(headers["user-agent"]);
+    const websiteUrl = `https://${projectName}`;
 
     const ip =
       headers["x-forwarded-for"]?.split(",")[0] ||
@@ -31,19 +32,17 @@ router.post("/", async (req, res) => {
 
     const visitData = {
       ip: ip,
-      device: agent.device.type || "Unknown",
       browser: agent.browser.name || "Unknown",
       platform: agent.os.name || "Unknown",
       page: page || "Unknown",
       referrer: referrer || "Unknown",
       country: country,
     };
-    const visitDocument = await Visit.findOne({ key: apiKey }).populate(
-      "creator",
-      "email"
-    );
+    const visitDocument = await Visit.findOne({
+      projectName: websiteUrl,
+    }).populate("creator", "email");
     if (!visitDocument) {
-      return res.status(400).json({ error: "Wrong apiKey" });
+      return res.status(400).json({ error: "Wrong website url" });
     }
     visitDocument.visit.push(visitData);
     await visitDocument.save();

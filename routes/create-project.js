@@ -1,7 +1,6 @@
 import express from "express";
 import Visit from "../models/Visit.js";
 import { verifyToken } from "../middleware/auth.js";
-import crypto from "crypto";
 import axios from "axios";
 import { load } from "cheerio";
 
@@ -12,11 +11,16 @@ router.post("/", verifyToken, async (req, res) => {
   const websiteUrl = `https://${projectName}`;
 
   try {
-    const randomName = `pt_${crypto.randomBytes(14).toString("hex")}`;
-    //const randomName = crypto.randomBytes(16).toString("hex");
-
     if (!projectName) {
       return res.status(400).json({ message: "Project name is required" });
+    }
+
+    const existingProject = await Visit.findOne({ projectName: websiteUrl });
+
+    if (existingProject) {
+      return res
+        .status(400)
+        .json({ message: "This website is already being tracked." });
     }
 
     let faviconUrl = null;
@@ -41,8 +45,7 @@ router.post("/", verifyToken, async (req, res) => {
     }
 
     const newProject = new Visit({
-      key: randomName,
-      projectName,
+      projectName: websiteUrl,
       creator: req.user.id,
       addedSnippet: false,
       logo: faviconUrl,
