@@ -15,7 +15,6 @@ router.post("/", async (req, res) => {
     const { headers, body } = req;
     const { projectName, page, referrer } = body;
     const agent = userAgent(headers["user-agent"]);
-    const websiteUrl = `https://${projectName}`;
 
     const ip =
       headers["x-forwarded-for"]?.split(",")[0] ||
@@ -39,7 +38,7 @@ router.post("/", async (req, res) => {
       country: country,
     };
     const visitDocument = await Visit.findOne({
-      projectName: websiteUrl,
+      projectName,
     }).populate("creator", "email");
     if (!visitDocument) {
       return res.status(400).json({ error: "Wrong website url" });
