@@ -239,7 +239,9 @@ router.post("/magic-link", async (req, res) => {
             <p style="font-size: 16px; color: #333;">Thank you for signing up for PixelTrack. Please click the link below to verify your email address:</p>
             
             <div style="text-align: center; margin-top: 20px;">
-              <a href="http://localhost:3000/verify-magic-link?token=${magicLinkToken}" style="text-decoration: none; padding: 10px 20px; background-color: #8b5cf6; color: #fff; border-radius: 4px;" target="_blank">Verify Email</a>
+              <a href="${
+                process.env.WEBSITE_URL
+              }/verify-magic-link?token=${magicLinkToken}" style="text-decoration: none; padding: 10px 20px; background-color: #8b5cf6; color: #fff; border-radius: 4px;" target="_blank">Verify Email</a>
             </div>
     
             <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">

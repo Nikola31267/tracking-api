@@ -68,9 +68,9 @@ router.post("/", async (req, res) => {
             <p style="font-size: 16px; color: #333;">You can now see the results in your dashboard.</p>
             
             <div style="text-align: center; margin-top: 20px;">
-              <a href="http://localhost:3000/dashboard/projects/${
-                visitDocument._id
-              }" style="text-decoration: none; padding: 10px 20px; background-color: #8b5cf6; color: #fff; border-radius: 4px;" target="_blank">Dashboard</a>
+              <a href="${process.env.WEBSITE_URL}/dashboard/projects/${
+            visitDocument._id
+          }" style="text-decoration: none; padding: 10px 20px; background-color: #8b5cf6; color: #fff; border-radius: 4px;" target="_blank">Dashboard</a>
             </div>
     
             <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
