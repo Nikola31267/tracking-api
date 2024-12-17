@@ -31,7 +31,7 @@ const openCorsOptions = {
 };
 
 app.get("/", (req, res) => {
-  res.redirect("http://localhost:3000");
+  res.redirect(process.env.WEBSITE_URL);
 });
 
 app.use("/api/create", cors(restrictedCorsOptions), createProjectRoutes);
