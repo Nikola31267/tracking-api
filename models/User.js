@@ -6,8 +6,6 @@ const userSchema = new mongoose.Schema({
   fullName: { type: String },
   password: { type: String },
   profilePicture: { type: String, default: "" },
-  resetPasswordToken: { type: String, default: "" },
-  resetPasswordExpiresAt: { type: Date, default: null },
   magicLinkToken: { type: String, default: "" },
   magicLinkExpiresAt: { type: Date, default: null },
   isEmailVerified: { type: Boolean, default: false },
