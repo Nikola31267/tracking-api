@@ -96,8 +96,7 @@ router.post("/google-signin", async (req, res) => {
 
 router.get("/user", verifyToken, async (req, res) => {
   const user = await User.findById(req.user.id);
-
-  if (user.freeTrialEndsAt && user.freeTrialEndsAt < Date.now()) {
+  if (user && user.freeTrialEndsAt && user.freeTrialEndsAt < Date.now()) {
     user.hasAccess = false;
     user.freeTrialEndsAt = null;
     await user.save();
