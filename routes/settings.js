@@ -15,9 +15,6 @@ router.put("/:id", verifyToken, upload.single("logo"), async (req, res) => {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    if (req.body.projectName) {
-      project.projectName = req.body.projectName;
-    }
     if (req.body.goal) {
       project.goal = req.body.goal;
     }
