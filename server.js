@@ -18,7 +18,11 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 const restrictedCorsOptions = {
-  origin: ["http://localhost:3000", "https://pixel-track.vercel.app"],
+  origin: [
+    "http://localhost:3000",
+    "https://pixel-track.vercel.app",
+    "https://pixeltrack.startgrid.xyz",
+  ],
   credentials: true,
 };
 
