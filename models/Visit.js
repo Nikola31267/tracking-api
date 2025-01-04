@@ -16,6 +16,13 @@ const visitSchema = new mongoose.Schema({
       country: String,
     },
   ],
+  signIns: { type: Number, default: 0 },
+  payments: [
+    {
+      value: Number,
+      timestamp: { type: Date, default: Date.now },
+    },
+  ],
   addedSnippet: { type: Boolean, default: false },
   creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });

@@ -36,6 +36,18 @@ router.get("/projects/:id", verifyToken, async (req, res) => {
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
+
+    // await fetch("http://localhost:8000/track/events", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     event_type: "payment",
+    //     paymentValue: 20,
+    //     projectUrl: "https://turboverify.vercel.app",
+    //   }),
+    // });
     res.status(200).json(project);
   } catch (error) {
     console.error("Error fetching project:", error);

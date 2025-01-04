@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   try {
     const { headers, body } = req;
-    const { projectName, page, referrer } = body;
+    const { projectName, id, page, referrer } = body;
     const agent = userAgent(headers["user-agent"]);
 
     const ip =
@@ -39,6 +39,7 @@ router.post("/", async (req, res) => {
     };
     const visitDocument = await Visit.findOne({
       projectName,
+      _id: id,
     }).populate("creator", "email");
     if (!visitDocument) {
       return res.status(400).json({ error: "Wrong website url" });
@@ -89,4 +90,47 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Error logging visit" });
   }
 });
+
+router.post("/events", async (req, res) => {
+  try {
+    const { body } = req;
+    const { event_type, projectUrl, id } = body;
+
+    const visitDocument = await Visit.findOne({
+      projectName: projectUrl,
+      _id: id,
+    });
+
+    if (!visitDocument) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    if (event_type === "sign_in") {
+      visitDocument.signIns += 1;
+    }
+
+    if (event_type === "payment") {
+      const { paymentValue } = body;
+
+      if (!paymentValue) {
+        return res.status(400).json({ message: "Invalid request body" });
+      }
+
+      const paymentData = {
+        value: paymentValue,
+        timestamp: new Date(),
+      };
+
+      visitDocument.payments.push(paymentData);
+    }
+
+    await visitDocument.save();
+
+    res.status(200).json({ message: "Event saved" });
+  } catch (error) {
+    console.error("Error saving event:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 export default router;
