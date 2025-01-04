@@ -94,11 +94,11 @@ router.post("/", async (req, res) => {
 router.post("/events", async (req, res) => {
   try {
     const { body } = req;
-    const { event_type, projectUrl, id } = body;
+    const { event_type, projectUrl, projectId } = body;
 
     const visitDocument = await Visit.findOne({
       projectName: projectUrl,
-      _id: id,
+      _id: projectId,
     });
 
     if (!visitDocument) {

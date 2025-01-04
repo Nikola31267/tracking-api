@@ -46,8 +46,10 @@ router.get("/projects/:id", verifyToken, async (req, res) => {
     //     event_type: "payment",
     //     paymentValue: 20,
     //     projectUrl: "https://turboverify.vercel.app",
+    //     projectId: "676f26e40a5a344fe4c9c607",
     //   }),
     // });
+
     res.status(200).json(project);
   } catch (error) {
     console.error("Error fetching project:", error);

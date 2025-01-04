@@ -62,18 +62,6 @@ router.post("/google-signin", async (req, res) => {
       //     "Content-Type": "application/json",
       //   },
       //   body: JSON.stringify({
-      //     event_type: "payment",
-      //     paymentValue: 20,
-      //     projectUrl: "https://turboverify.vercel.app",
-      //   }),
-      // });
-
-      // await fetch("http://localhost:8000/track/events", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
       //     event_type: "sign_in",
       //     projectUrl: "https://turboverify.vercel.app",
       //   }),
