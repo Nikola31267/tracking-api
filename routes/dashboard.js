@@ -20,9 +20,22 @@ router.get("/projects", verifyToken, async (req, res) => {
       return total + recentVisits.length;
     }, 0);
 
+    const totalRecentRevenue = projects.reduce((grandTotal, project) => {
+      if (!Array.isArray(project.payments)) return grandTotal;
+      const recentPayments = project.payments.filter(
+        (payment) => payment.timestamp >= oneDayAgo
+      );
+      const projectRecentTotal = recentPayments.reduce(
+        (projectTotal, payment) => projectTotal + payment.value,
+        0
+      );
+      return grandTotal + projectRecentTotal;
+    }, 0);
+
     res.status(200).json({
       allProjects: projects,
       totalRecentVisits,
+      totalRecentRevenue,
     });
   } catch (error) {
     console.error("Error fetching projects:", error);
@@ -37,18 +50,9 @@ router.get("/projects/:id", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    // await fetch("http://localhost:8000/track/events", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     event_type: "payment",
-    //     paymentValue: 20,
-    //     projectUrl: "https://turboverify.vercel.app",
-    //     projectId: "676f26e40a5a344fe4c9c607",
-    //   }),
-    // });
+    if (project.creator.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
 
     res.status(200).json(project);
   } catch (error) {
@@ -79,36 +83,6 @@ router.delete("/projects/:id", verifyToken, async (req, res) => {
       .json({ message: "Project and associated image deleted successfully" });
   } catch (error) {
     console.error("Error deleting project:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-router.get("/projects/:id/visits", verifyToken, async (req, res) => {
-  try {
-    const project = await Visit.findById(req.params.id);
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
-    }
-    res.status(200).json(project.visit);
-  } catch (error) {
-    console.error("Error fetching visits for project:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-router.get("/projects/:id/visits/:visitId", verifyToken, async (req, res) => {
-  try {
-    const project = await Visit.findById(req.params.id);
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
-    }
-    const specificVisit = project.visit.id(req.params.visitId);
-    if (!specificVisit) {
-      return res.status(404).json({ message: "Visit not found" });
-    }
-    res.status(200).json(specificVisit);
-  } catch (error) {
-    console.error("Error fetching specific visit for project:", error);
     res.status(500).json({ message: "Server error" });
   }
 });

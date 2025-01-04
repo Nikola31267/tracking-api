@@ -49,7 +49,6 @@ router.post("/", verifyToken, async (req, res) => {
       creator: req.user.id,
       addedSnippet: false,
       logo: faviconUrl,
-      payments: 0,
       signIns: 0,
     });
 
