@@ -19,6 +19,7 @@ const visitSchema = new mongoose.Schema({
   signIns: { type: Number, default: 0 },
   payments: [
     {
+      productName: String,
       value: Number,
       timestamp: { type: Date, default: Date.now },
     },

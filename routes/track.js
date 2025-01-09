@@ -110,7 +110,7 @@ router.post("/events", async (req, res) => {
     }
 
     if (event_type === "payment") {
-      const { paymentValue } = body;
+      const { paymentValue, productName } = body;
 
       if (!paymentValue) {
         return res.status(400).json({ message: "Invalid request body" });
@@ -118,6 +118,7 @@ router.post("/events", async (req, res) => {
 
       const paymentData = {
         value: paymentValue,
+        productName: productName,
         timestamp: new Date(),
       };
 
