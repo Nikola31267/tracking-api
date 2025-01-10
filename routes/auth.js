@@ -2,7 +2,6 @@ import express from "express";
 import User from "../models/User.js";
 const router = express.Router();
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import { verifyToken } from "../middleware/auth.js";
 import axios from "axios";
 import multer from "multer";
@@ -229,7 +228,7 @@ router.post("/magic-link", async (req, res) => {
 
     await (async function () {
       const { data, error } = await resend.emails.send({
-        from: "Pixel Track <pixeltrack@builderbee.pro>",
+        from: "Pixel Track <no-reply@builderbee.pro>",
         to: [email],
         subject: "Verify your email",
         html: `

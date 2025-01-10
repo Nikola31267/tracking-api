@@ -24,6 +24,13 @@ const visitSchema = new mongoose.Schema({
       timestamp: { type: Date, default: Date.now },
     },
   ],
+  issues: [
+    {
+      userEmail: String,
+      title: String,
+      description: String,
+    },
+  ],
   addedSnippet: { type: Boolean, default: false },
   creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
