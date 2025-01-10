@@ -29,6 +29,7 @@ const visitSchema = new mongoose.Schema({
       userEmail: String,
       title: String,
       description: String,
+      state: String,
     },
   ],
   addedSnippet: { type: Boolean, default: false },
