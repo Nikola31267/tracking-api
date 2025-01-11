@@ -37,7 +37,7 @@ router.post("/send", async (req, res) => {
     const { data, error } = await resend.emails.send({
       from: "Pixel Track <pixeltrack@builderbee.pro>",
       to: [creatorEmail],
-      subject: title,
+      subject: `Issue for ${projectName}`,
       html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
             <h1 style="color: #8b5cf6; text-align: center;">${title}</h1>
@@ -76,7 +76,7 @@ router.post("/send", async (req, res) => {
 });
 
 router.post("/reply", async (req, res) => {
-  const { userEmail, title, description, projectName, id } = req.body;
+  const { userEmail, title, description, projectName, id, issueId } = req.body;
 
   try {
     const visitDocument = await Visit.findOne({
@@ -88,16 +88,41 @@ router.post("/reply", async (req, res) => {
       return res.status(400).json({ error: "Wrong website url" });
     }
 
-    visitDocument.issues.push({
-      state: "Replied",
-    });
+    const matchingIssue = visitDocument.issues.find(
+      (issue) => issue.userEmail === userEmail
+    );
+
+    if (!matchingIssue) {
+      return res.status(404).json({
+        error: "No issue found reported by this email in the issues array.",
+      });
+    }
+
+    const issueDocument = visitDocument.issues.find(
+      (issue) => issue._id.toString() === issueId
+    );
+
+    if (!issueDocument) {
+      return res.status(404).json({
+        error: "No issue found with the provided issue ID.",
+      });
+    }
+
+    if (issueDocument.state === "Replied") {
+      return res.status(403).json({
+        error: "You already replied to that issue",
+      });
+    }
+
+    issueDocument.state = "Replied";
+
     await visitDocument.save();
 
     (async function () {
       const { data, error } = await resend.emails.send({
         from: "Pixel Track <pixeltrack@builderbee.pro>",
         to: [userEmail],
-        subject: title,
+        subject: `Issue Complain Reply`,
         html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
               <h1 style="color: #8b5cf6; text-align: center;">${title}</h1>
