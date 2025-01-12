@@ -140,7 +140,10 @@ router.post("/reply", async (req, res) => {
       }
       console.log({ data });
     })();
-    res.status(200).json({ message: "Issue report reply sent successfully" });
+    res.status(200).json({
+      message: "Issue report reply sent successfully",
+      updatedIssue: issueDocument,
+    });
   } catch {
     console.error("Error handling /send request:", error);
     res.status(500).json({ error: "Internal server error" });
