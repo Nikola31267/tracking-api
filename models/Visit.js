@@ -14,7 +14,11 @@ const visitSchema = new mongoose.Schema({
       timestamp: { type: Date, default: Date.now },
       referrer: String,
       country: String,
-      issue: { type: mongoose.Schema.Types.ObjectId },
+      issues: [
+        {
+          id: { type: mongoose.Schema.Types.ObjectId },
+        },
+      ],
     },
   ],
   signIns: { type: Number, default: 0 },
