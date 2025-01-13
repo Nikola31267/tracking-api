@@ -84,9 +84,7 @@ router.post("/", async (req, res) => {
         console.log({ data });
       })();
     }
-    res
-      .status(201)
-      .json({ message: "Visit logged successfully!", visitDocument });
+    res.status(201).json({ message: "Visit logged successfully!" });
   } catch (error) {
     console.error("Error logging visit:", error);
     res.status(500).json({ error: "Error logging visit" });
