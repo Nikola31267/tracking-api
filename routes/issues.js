@@ -8,7 +8,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const router = express.Router();
 
 router.post("/send", async (req, res) => {
-  const { userEmail, title, description, projectName, id } = req.body;
+  const { userEmail, title, description, projectName, id, visitId } = req.body;
 
   try {
     const visitDocument = await Visit.findOne({
@@ -32,6 +32,19 @@ router.post("/send", async (req, res) => {
       description,
       state: "Not replied",
     });
+    await visitDocument.save();
+
+    const createdIssue = visitDocument.issues[visitDocument.issues.length - 1];
+
+    const specificVisit = visitDocument.visit.find(
+      (v) => v._id.toString() === visitId
+    );
+    if (!specificVisit) {
+      return res.status(404).json({ error: "Visit not found" });
+    }
+
+    specificVisit.issue = createdIssue._id;
+
     await visitDocument.save();
 
     const { data, error } = await resend.emails.send({
