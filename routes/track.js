@@ -45,6 +45,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Wrong website url" });
     }
     visitDocument.visit.push(visitData);
+    const savedVisit = visitDocument.visit[visitDocument.visit.length - 1];
     await visitDocument.save();
     if (visitDocument.visit.length === parseInt(visitDocument.goal, 10)) {
       const creatorEmail = visitDocument.creator.email;
@@ -86,7 +87,7 @@ router.post("/", async (req, res) => {
     }
     res
       .status(201)
-      .json({ message: "Visit logged successfully!", visitDocument });
+      .json({ message: "Visit logged successfully!", visitId: savedVisit });
   } catch (error) {
     console.error("Error logging visit:", error);
     res.status(500).json({ error: "Error logging visit" });
