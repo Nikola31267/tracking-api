@@ -39,12 +39,12 @@ router.post("/send", async (req, res) => {
     const specificVisit = visitDocument.visit.find(
       (v) => v._id.toString() === visitId
     );
+
     if (!specificVisit) {
       return res.status(404).json({ error: "Visit not found" });
     }
 
-    specificVisit.issue = createdIssue._id;
-
+    specificVisit.issues.push({ id: createdIssue._id });
     await visitDocument.save();
 
     const { data, error } = await resend.emails.send({
