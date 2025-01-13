@@ -87,7 +87,7 @@ router.post("/", async (req, res) => {
     }
     res
       .status(201)
-      .json({ message: "Visit logged successfully!", visitId: savedVisit });
+      .json({ message: "Visit logged successfully!", visitId: savedVisit._id });
   } catch (error) {
     console.error("Error logging visit:", error);
     res.status(500).json({ error: "Error logging visit" });
