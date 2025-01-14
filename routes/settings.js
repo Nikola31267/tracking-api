@@ -14,9 +14,18 @@ router.put("/:id", verifyToken, upload.single("logo"), async (req, res) => {
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
+    const { goal, paymentGoal, signInGoal } = req.body;
 
-    if (req.body.goal) {
-      project.goal = req.body.goal;
+    if (goal) {
+      project.goal = goal;
+    }
+
+    if (paymentGoal) {
+      project.paymentGoal = paymentGoal;
+    }
+
+    if (signInGoal) {
+      project.signInGoal = signInGoal;
     }
 
     if (req.file) {
@@ -43,7 +52,6 @@ router.put("/:id", verifyToken, upload.single("logo"), async (req, res) => {
         }
       );
 
-      // Use the buffer from req.file to upload to Cloudinary
       uploadResponse.end(req.file.buffer);
     } else {
       await project.save();

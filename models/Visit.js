@@ -4,6 +4,8 @@ const visitSchema = new mongoose.Schema({
   projectName: { type: String, required: true },
   logo: { type: String, default: null },
   goal: { type: String, default: "" },
+  signInGoal: { type: String, default: "" },
+  paymentGoal: { type: String, default: "" },
   visit: [
     {
       ip: String,
