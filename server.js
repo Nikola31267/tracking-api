@@ -9,7 +9,6 @@ import createProjectRoutes from "./routes/create-project.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import settingsRoutes from "./routes/settings.js";
 import trackRoutes from "./routes/track.js";
-import issueRoutes from "./routes/issues.js";
 
 dotenv.config();
 
@@ -24,6 +23,7 @@ const restrictedCorsOptions = {
     "http://localhost:3000",
     "https://pixel-track.vercel.app",
     "https://pixeltrack.startgrid.xyz",
+    "https://tracking-website-rosy.vercel.app",
   ],
   credentials: true,
 };
@@ -44,7 +44,6 @@ app.use("/api/create", cors(restrictedCorsOptions), createProjectRoutes);
 app.use("/api/dashboard", cors(restrictedCorsOptions), dashboardRoutes);
 app.use("/api/settings", cors(restrictedCorsOptions), settingsRoutes);
 app.use("/api/auth", cors(restrictedCorsOptions), authRoutes);
-app.use("/issues", cors(openCorsOptions), issueRoutes);
 app.use("/track", cors(openCorsOptions), trackRoutes);
 
 if (process.env.NODE_ENV !== "production") {

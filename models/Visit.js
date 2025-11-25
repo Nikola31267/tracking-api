@@ -4,8 +4,6 @@ const visitSchema = new mongoose.Schema({
   projectName: { type: String, required: true },
   logo: { type: String, default: null },
   goal: { type: String, default: "" },
-  signInGoal: { type: String, default: "" },
-  paymentGoal: { type: String, default: "" },
   visit: [
     {
       ip: String,
@@ -21,22 +19,6 @@ const visitSchema = new mongoose.Schema({
           id: { type: mongoose.Schema.Types.ObjectId },
         },
       ],
-    },
-  ],
-  signIns: { type: Number, default: 0 },
-  payments: [
-    {
-      productName: String,
-      value: Number,
-      timestamp: { type: Date, default: Date.now },
-    },
-  ],
-  issues: [
-    {
-      userEmail: String,
-      title: String,
-      description: String,
-      state: String,
     },
   ],
   addedSnippet: { type: Boolean, default: false },

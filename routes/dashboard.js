@@ -20,22 +20,9 @@ router.get("/projects", verifyToken, async (req, res) => {
       return total + recentVisits.length;
     }, 0);
 
-    const totalRecentRevenue = projects.reduce((grandTotal, project) => {
-      if (!Array.isArray(project.payments)) return grandTotal;
-      const recentPayments = project.payments.filter(
-        (payment) => payment.timestamp >= oneDayAgo
-      );
-      const projectRecentTotal = recentPayments.reduce(
-        (projectTotal, payment) => projectTotal + payment.value,
-        0
-      );
-      return grandTotal + projectRecentTotal;
-    }, 0);
-
     res.status(200).json({
       allProjects: projects,
       totalRecentVisits,
-      totalRecentRevenue,
     });
   } catch (error) {
     console.error("Error fetching projects:", error);

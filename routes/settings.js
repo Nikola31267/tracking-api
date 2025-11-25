@@ -14,18 +14,10 @@ router.put("/:id", verifyToken, upload.single("logo"), async (req, res) => {
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
-    const { goal, paymentGoal, signInGoal } = req.body;
+    const { goal } = req.body;
 
     if (goal) {
       project.goal = goal;
-    }
-
-    if (paymentGoal) {
-      project.paymentGoal = paymentGoal;
-    }
-
-    if (signInGoal) {
-      project.signInGoal = signInGoal;
     }
 
     if (req.file) {
