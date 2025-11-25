@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
       image: { type: String },
     },
   ],
-  hasAccess: { type: Booleanl, default: true },
+  hasAccess: { type: Boolean, default: true },
   newUser: { type: Boolean, default: true },
 });
 
