@@ -228,24 +228,18 @@ router.post("/magic-link", async (req, res) => {
 
     await (async function () {
       const { data, error } = await resend.emails.send({
-        from: "Pixel Track <no-reply@builderbee.pro>",
+        from: "Pixel Track <no-reply@startgrid.xyz>",
         to: [email],
         subject: "Verify your email",
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
             <h1 style="color: #8b5cf6; text-align: center;">Verify Your Email Address</h1>
             <p style="font-size: 16px; color: #333;">Hello ${email},</p>
-            <p style="font-size: 16px; color: #333;">Thank you for signing up for PixelTrack. Please click the link below to verify your email address:</p>
+            <p style="font-size: 16px; color: #333;">Thank you for signing up for Data Traffic App. Please click the link below to verify your email address:</p>
             
             <div style="text-align: center; margin-top: 20px;">
-              <a href="${
-                process.env.WEBSITE_URL
-              }/verify-magic-link?token=${magicLinkToken}" style="text-decoration: none; padding: 10px 20px; background-color: #8b5cf6; color: #fff; border-radius: 4px;" target="_blank">Verify Email</a>
+              <a href="${process.env.WEBSITE_URL}/verify-magic-link?token=${magicLinkToken}" style="text-decoration: none; padding: 10px 20px; background-color: #8b5cf6; color: #fff; border-radius: 4px;" target="_blank">Verify Email</a>
             </div>
-    
-            <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
-              &copy; ${new Date().getFullYear()} Pixel Track. All rights reserved.
-            </p>
           </div>
         `,
       });

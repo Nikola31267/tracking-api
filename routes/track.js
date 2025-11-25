@@ -55,27 +55,19 @@ router.post("/", async (req, res) => {
       }
       (async function () {
         const { data, error } = await resend.emails.send({
-          from: "PixelTrack <pixeltrack@startgrid.xyz>",
+          from: "Tracking App <no-reply@startgrid.xyz>",
           to: [creatorEmail],
           subject: "Goal reached",
           html: `
              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
             <h1 style="color: #8b5cf6; text-align: center;">Goal reached</h1>
             <p style="font-size: 16px; color: #333;">Hello ${creatorEmail},</p>
-            <p style="font-size: 16px; color: #333;">Your goal of ${
-              visitDocument.goal
-            } visits has been reached. Congratulations and thank you for using Pixel Track!</p>
+            <p style="font-size: 16px; color: #333;">Your goal of ${visitDocument.goal} visits has been reached. Congratulations!</p>
             <p style="font-size: 16px; color: #333;">You can now see the results in your dashboard.</p>
             
             <div style="text-align: center; margin-top: 20px;">
-              <a href="${process.env.WEBSITE_URL}/dashboard/projects/${
-            visitDocument._id
-          }" style="text-decoration: none; padding: 10px 20px; background-color: #8b5cf6; color: #fff; border-radius: 4px;" target="_blank">Dashboard</a>
+              <a href="${process.env.WEBSITE_URL}/dashboard/projects/${visitDocument._id}" style="text-decoration: none; padding: 10px 20px; background-color: #8b5cf6; color: #fff; border-radius: 4px;" target="_blank">Dashboard</a>
             </div>
-    
-            <p style="font-size: 14px; color: #888; text-align: center; margin-top: 20px;">
-              &copy; ${new Date().getFullYear()} Pixel Track. All rights reserved.
-            </p>
           </div>
           `,
         });
